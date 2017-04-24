@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			div,p{
+				width: 200px;
+				height: 200px;
+				
+				position: absolute;
+			}
+			p{
+				background: #00FFFF;
+			}
+			div{
+				background: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div></div>
+		<p></p>
+		<script>
+			/*拖拽的原型
+			 * 
+			 * 两个对象   div  p  ---》实例对象
+			 * 
+			 * 
+			 */
+			//构造函数  ---》原型
+			
+			
+			//属性
+			function Drag(element){//构造函数
+				var _this=this;
+				this.element=element;
+				this.disx=0;
+				this.disy=0;
+				this.element.onmousedown=function(e){
+					//鼠标按下   需要---》div p
+					_this.mouseDown(e)
+				}
+				
+			}
+			
+			//方法:通过原型添加事件的方法
+			Drag.prototype.mouseDown=function(e){
+				var e=e||window.event;
+				var _this=this;   //判断按下的是哪个
+             	this.disx=e.clientX-this.element.offsetLeft;
+             	this.disy=e.clientY-this.element.offsetTop;
+             	document.onmousemove=function(e){
+             		_this.mouseMove(e);
+             	}
+             	document.onmouseup=function(){
+             		_this.mouseUp();
+             	}
+			}
+			Drag.prototype.mouseMove=function(e){
+				var l=e.clientX-this.disx;
+             	var t=e.clientY-this.disy;
+             	//赋值
+             	this.element.style.left=l+"px";
+               	this.element.style.top=t+"px";
+			}
+			Drag.prototype.mouseUp=function(){
+				document.onmousemove=null;//释放事件
+             	document.onmouseup=null;
+			}
+			
+           
+            //构造函数实例化
+            var odiv=document.querySelector("div");
+            var op=document.querySelector("p");
+            var d=new Drag(odiv);   //div实例化
+            var p=new Drag(op);     //p实例化
+//          
+
+            /*改造步骤
+             * 1.所有的东西都在window.onload里面
+             * 2.改写：不能有函数嵌套，但可以有全局变量
+             * 3.全局变量----》属性
+             *   函数---》方法
+             * 
+             * 
+             * 
+             */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//           function mouseDown(e){
+//           	var e=e||window.event;
+//           	disx=e.clientX-odiv.offsetLeft;
+//           	disy=e.clientY-odiv.offsetTop;
+//           	document.onmousemove=mouseMove;
+//           	document.onmouseup=mouseUp;
+//           	
+//           }
+//           function mouseMove(e){
+//           	var l=e.clientX-disx;
+//           	var t=e.clientY-disy;
+//           	//赋值
+//           	odiv.style.left=l+"px";
+//             	odiv.style.top=t+"px";
+//           	
+//           }
+//           function mouseUp(){
+//           	document.onmousemove=null;//释放事件
+//           	document.onmouseup=null;
+//           }
+       
+		</script>
+	</body>
+</html>
